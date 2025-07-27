@@ -1,22 +1,26 @@
 ﻿using System.Collections.ObjectModel;
+using XalqBankTestApp;
+using XalqBankTestAppFileMonitoring.Interfaces;
 using XalqBankTestAppFileMonitoring.Models;
 using XalqBankTestAppFileMonitoring.Services;
 
-namespace XalqBankTestApp
+public class MainViewModel
 {
-    public class MainViewModel
-    {
-        public ObservableCollection<FileData> FileData { get; } = new();
-        private readonly FileMonitorService monitor;
+    public ObservableCollection<FileData> FileData { get; } = new();
+    private readonly FileMonitorService monitor;
 
-        public MainViewModel()
+    public MainViewModel()
+    {
+        var fileSystem = new FileSystem();
+        var config = new AppConfigProvider();
+        var pluginLoader = new PluginLoader(config);
+
+        monitor = new FileMonitorService(fileSystem, config, pluginLoader);
+
+        monitor.OnDataLoaded += filedata =>
         {
-            monitor = new FileMonitorService();
-            monitor.OnDataLoaded += filedata =>
-            {
-                App.Current.Dispatcher.Invoke(() => FileData.Add(filedata));
-            };
-            monitor.Start();
-        }
+            App.Current.Dispatcher.Invoke(() => FileData.Add(filedata));
+        };
+        monitor.Start();
     }
 }
