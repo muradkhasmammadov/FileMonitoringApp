@@ -1,0 +1,8 @@
+﻿<Window x:Class="XalqBankTestApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Xalq Bank Test App" Height="450" Width="800">
+    <Grid>
+        <DataGrid ItemsSource="{Binding FileData}" AutoGenerateColumns="True"/>
+    </Grid>
+</Window>
